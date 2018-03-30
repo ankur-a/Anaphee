@@ -35,6 +35,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
 import java.util.Random;
 
@@ -64,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // String for MAC address
     private static String address;
-
+    NotificationCompat.Builder notification;
+    private int id=123;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -93,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if(readMessage.contains("ON!!")&& ch==false){
                         pulseView.startPulse();
                         ch=true;
+                        notification_func();
                     }
                     readMessage="";
                       // msg.arg1 = bytes from connect thread
@@ -101,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
-
+        notification = new NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
 
     }
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -110,6 +117,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //creates secure outgoing connecetion with BT device using UUID
     }
 
+    public void notification_func() {
+        notification.setSmallIcon(R.drawable.ic_launcher_background);
+        notification.setTicker("warning");
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("Unstable rythm");
+        notification.setContentText("Dangerous Vitals");
+        Intent intent= new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationManager nm= (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(id,notification.build());
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
