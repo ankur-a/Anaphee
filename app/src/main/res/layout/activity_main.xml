@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:fitsSystemWindows="true">
+
+    <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+    </FrameLayout>
+
+    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/navigation_menu"
+        app:headerLayout="@layout/nav_header"/>
+
+
+
+    <com.gigamole.library.PulseView
+        android:id="@+id/pv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:pv_alpha="70"
+        app:pv_color="#E57373"
+        app:pv_count="3"
+        app:pv_measure="height"
+        app:pv_icon_width="94dp"
+        app:pv_icon_height="94dp"
+        app:pv_spawn_period="700"
+        app:pv_interpolator="@android:anim/linear_interpolator"
+        app:pv_icon="@drawable/heart"
+        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/txt_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="72"
+            android:textSize="50dp"
+            android:textAlignment="center"
+            android:paddingBottom="50sp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/simptxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txt"
+            android:layout_alignBottom="@+id/txt"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="80dp"
+            android:text="Bps"
+            android:textAlignment="center"
+            android:textSize="40dp" />
+
+    </RelativeLayout>
+
+
+
+</android.support.v4.widget.DrawerLayout>
+

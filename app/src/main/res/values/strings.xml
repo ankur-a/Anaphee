@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Anaphee</string>
+    <string name="open">Open </string>
+    <string name="close">Close</string>
+    <string name="title_activity_statistics">statistics</string>
+    <string name="title_activity_device_list">DeviceListActivity</string>
+    <string name="none_paired">None paired</string>
+</resources>
