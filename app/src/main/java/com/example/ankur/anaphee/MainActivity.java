@@ -2,11 +2,13 @@ package com.example.ankur.anaphee;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,8 @@ import android.os.Handler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -39,16 +43,18 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-
+import java.util.Calendar;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public boolean ch=false;
     PulseView pulseView;
+    DatabaseHelper mydb;
     private TextView mHearbeatText;
     Button btnstart,btnstop;
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    Button btnAddData,viewallBtn;
     //public static ik=0;
     private String [] str = {"72", "68", "71", "80"};
     public static int i=0;
@@ -60,9 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private StringBuilder recDataString = new StringBuilder();
-
+    String time_now = new String();
     private ConnectedThread mConnectedThread;
-
+    SimpleDateFormat date,time;
     // SPP UUID service - this should work for most devices
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -77,10 +83,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pulseView =(PulseView)findViewById(R.id.pv);
-
+        viewallBtn=(Button)findViewById(R.id.buttonShow);
 
         mHearbeatText = (TextView) findViewById(R.id.txt_value);
-
+        mydb = new DatabaseHelper(this);
         mdrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this,mdrawerLayout,R.string.open,R.string.close);
         mdrawerLayout.addDrawerListener(mToggle);
@@ -89,16 +95,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationview= findViewById(R.id.nav_view);
         navigationview.bringToFront();
         navigationview.setNavigationItemSelectedListener(this);
+        date = new SimpleDateFormat("yyyy/MM/dd");
+        time = new SimpleDateFormat("HH/mm/ss");
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == handlerState) {                                     //if message is what we want
                     String readMessage = (String) msg.obj;
                     mHearbeatText.setText(readMessage);
-                    if(readMessage.contains("ON!!")&& ch==false){
+                    if(readMessage.contains("ON!!")){
                         pulseView.startPulse();
-                        ch=true;
+                        if(ch!=true)
                         notification_func();
+                        ch=true;
+                        String dateV = date.format(new Date());
+                        long time = new Date().getTime();
+                        boolean inserted= false;
+                        Random rand = new Random();
+
+                        int  n = rand.nextInt(50) + 72;
+                        inserted= mydb.insertData(dateV,time,n);
+
                     }
                     readMessage="";
                       // msg.arg1 = bytes from connect thread
@@ -109,6 +126,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkBTState();
         notification = new NotificationCompat.Builder(this);
         notification.setAutoCancel(true);
+        ViewAll();
+
+    }
+
+
+
+    public void ViewAll(){
+        viewallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH/mm/ss");
+                String currentDateandTime = sdf.format(new Date());
+
+                Date currentTime = Calendar.getInstance().getTime();
+                Toast.makeText(MainActivity.this,currentDateandTime,Toast.LENGTH_SHORT).show();
+                Cursor res = mydb.getAllData();
+                if(res.getCount()==0){
+                    showMessage("Error","Nothing Found");
+                    return;
+                }
+                else{
+                    StringBuffer buffer = new StringBuffer();
+                    while(res.moveToNext()){
+                        buffer.append("ID:"+ res.getString(0)+"\n");
+                        buffer.append("Date:"+ res.getString(1)+"\n");
+                        buffer.append("Time:"+ res.getLong(2)+"\n");
+                        buffer.append("Heart Beats:"+ res.getInt(3)+"\n\n");
+                    }
+                    showMessage("Data",buffer.toString());
+                }
+            }
+        });
+    }
+    public void showMessage(String Title, String Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(Title);
+        builder.setMessage(Message);
+        builder.show();
 
     }
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {

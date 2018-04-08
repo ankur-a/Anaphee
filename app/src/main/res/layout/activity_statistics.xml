@@ -7,13 +7,88 @@
     android:background="#ffffff"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/statistics">
+        android:layout_height="match_parent">
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/grpahview"
+            android:layout_centerHorizontal="true"
+            android:text="MAX"
+            android:textColor="@android:color/background_dark"
+            android:textColorLink="@android:color/background_dark"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView4"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_alignParentStart="true"
+            android:text="MIN"
+            android:paddingLeft="20dp"
+            android:textColor="@android:color/background_dark"
+            android:textColorLink="@android:color/background_dark"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <com.jjoe64.graphview.GraphView android:layout_height="350dp"
+            android:layout_width="match_parent"
+            android:id="@+id/grpahview">
+        </com.jjoe64.graphview.GraphView>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView4"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_alignParentEnd="true"
+            android:text="AVG"
+            android:textColor="@android:color/background_dark"
+            android:textColorLink="@android:color/background_dark"
+            android:paddingRight="20dp"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="31dp"
+            android:paddingLeft="20dp"
+            android:text="__"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/min"
+            android:layout_alignBottom="@+id/min"
+            android:layout_centerHorizontal="true"
+            android:text="__"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/avg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView2"
+            android:layout_alignTop="@+id/max"
+            android:paddingRight="20dp"
+            android:text="__"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
 

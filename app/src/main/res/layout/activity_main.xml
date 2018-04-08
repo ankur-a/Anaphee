@@ -54,11 +54,14 @@
             android:id="@+id/txt_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="72"
-            android:textSize="50dp"
-            android:textAlignment="center"
+            android:layout_alignBottom="@+id/button"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="69dp"
             android:paddingBottom="50sp"
-            android:textColor="#000000"/>
+            android:text="72"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="50dp" />
 
         <TextView
             android:id="@+id/simptxt"
@@ -71,6 +74,16 @@
             android:text="Bps"
             android:textAlignment="center"
             android:textSize="40dp" />
+
+        <Button
+            android:id="@+id/buttonShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/button_add"
+            android:layout_alignTop="@+id/button_add"
+            android:layout_marginTop="68dp"
+            android:text="ShowData" />
+
 
     </RelativeLayout>
 
