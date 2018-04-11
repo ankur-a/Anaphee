@@ -1,5 +1,6 @@
 package com.example.ankur.anaphee;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -36,7 +37,7 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
     GraphView graphView;
     LineGraphSeries<DataPoint> series;
     int minV=2000,maxV=0,avgV;
-    SimpleDateFormat sdf = new SimpleDateFormat("M hh:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,7 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
         series = new LineGraphSeries<>(getDataPoint());
         series.setColor(Color.RED);
         graphView.setTitle("Today");
+
         graphView.addSeries(series);
 
         graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
@@ -68,10 +70,12 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
                 }else
                 return super.formatLabel(value, isValueX);
             }
-        });
 
+        });
         graphView.getGridLabelRenderer().setNumHorizontalLabels(5);
         graphView.getGridLabelRenderer().setHumanRounding(false);
+        graphView.getGridLabelRenderer().setHorizontalAxisTitle("Heart Beat");
+        graphView.getGridLabelRenderer().setVerticalAxisTitle("Time");
         min.setText(String.valueOf(minV));
         max.setText(String.valueOf(maxV));
         avg.setText(String.valueOf(avgV));
@@ -82,17 +86,32 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
     private DataPoint[] getDataPoint() {
         Cursor res = mydb.getAllData();
         DataPoint[] dp = new DataPoint[res.getCount()];
-        int sum=0;
-        for(int i=0;i<res.getCount();i++){
-            res.moveToNext();
-            int tmp= res.getInt(3);
-            if(tmp<minV) minV=tmp;
-            if(tmp>maxV) maxV=tmp;
-            sum+=tmp;
-            dp[i]=new DataPoint(res.getLong(2),res.getInt(3));
+        if(res.getCount()>0) {
+            int sum = 0;
+            for (int i = 0; i < res.getCount(); i++) {
+                res.moveToNext();
+                int tmp = res.getInt(3);
+                if (tmp < minV) minV = tmp;
+                if (tmp > maxV) maxV = tmp;
+                sum += tmp;
+                dp[i] = new DataPoint(res.getLong(2), res.getInt(3));
+            }
+            avgV = sum / res.getCount();
         }
-        avgV=sum/res.getCount();
+        else {
+            AlertDialog alertDialog = new AlertDialog.Builder(statistics.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("No previous data available");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            minV=0;
 
+        }
         return dp;
     }
 
@@ -127,7 +146,8 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
             Toast.makeText(this,"Instructions",Toast.LENGTH_SHORT).show();
         }
         if(id==R.id.about){
-            Toast.makeText(this,"About",Toast.LENGTH_SHORT).show();
+            Intent i= new Intent(this, About.class);
+            startActivity(i);
         }
         mdrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mdrawerLayout.closeDrawers();

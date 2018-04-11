@@ -1,32 +1,37 @@
 package com.example.ankur.anaphee;
 
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class history extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class About extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    TextView content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.activity_about);
         mdrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this,mdrawerLayout,R.string.open,R.string.close);
         mdrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+        content =(TextView)findViewById(R.id.content);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationview= findViewById(R.id.nav_view);
         navigationview.bringToFront();
         navigationview.setNavigationItemSelectedListener(this);
+        content.setText("•Real time heart beat\n\n•Notification on onset of attack\n\n•Notifying hospital about the attack via mail.\n\n•Track of heart beat stats.\n\n•Step by step help in using the \ninjector");
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

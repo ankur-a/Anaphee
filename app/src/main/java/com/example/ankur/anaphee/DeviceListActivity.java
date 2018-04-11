@@ -49,7 +49,7 @@ public class DeviceListActivity extends AppCompatActivity {
         checkBTState();
 
         textView1 = (TextView) findViewById(R.id.connecting);
-        textView1.setTextSize(40);
+        textView1.setTextSize(35);
         textView1.setText(" ");
 
         // Initialize array adapter for paired devices

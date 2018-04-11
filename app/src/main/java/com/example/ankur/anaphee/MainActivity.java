@@ -1,9 +1,13 @@
 package com.example.ankur.anaphee;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -54,10 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Button btnstart,btnstop;
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    Button btnAddData,viewallBtn;
-    //public static ik=0;
-    private String [] str = {"72", "68", "71", "80"};
-    public static int i=0;
+    Button btnAddData;
+    FloatingActionButton viewallBtn;
     Button btnOn, btnOff;
     TextView txtArduino, txtString, txtStringLength, sensorView0, sensorView1, sensorView2, sensorView3;
     Handler bluetoothIn;
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pulseView =(PulseView)findViewById(R.id.pv);
-        viewallBtn=(Button)findViewById(R.id.buttonShow);
+        viewallBtn=(FloatingActionButton) findViewById(R.id.buttonShow);
 
         mHearbeatText = (TextView) findViewById(R.id.txt_value);
         mydb = new DatabaseHelper(this);
@@ -102,11 +104,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == handlerState) {                                     //if message is what we want
                     String readMessage = (String) msg.obj;
-                    mHearbeatText.setText(readMessage);
+                    /*
+                    recDataString.append(readMessage);
+                    int endOfLineIndex = recDataString.indexOf("!");
+                    if(endOfLineIndex>0){
+                        String dataInPrint = recDataString.substring(0, endOfLineIndex);
+                        int dataLength= dataInPrint.length();
+                        if(recDataString.charAt(0)=='#'){
+                            String text= recDataString.substring(1,endOfLineIndex);
+                            mHearbeatText.setText(readMessage);
+                        }
+                        recDataString.delete(0,recDataString.length());
+                        dataInPrint=" ";
+                    }
+*/
                     if(readMessage.contains("ON!!")){
                         pulseView.startPulse();
-                        if(ch!=true)
-                        notification_func();
                         ch=true;
                         String dateV = date.format(new Date());
                         long time = new Date().getTime();
@@ -115,10 +128,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         int  n = rand.nextInt(50) + 72;
                         inserted= mydb.insertData(dateV,time,n);
+                        int index1 = readMessage.indexOf("#");
+                        int index2 = readMessage.indexOf("!");
+                        mHearbeatText.setText(readMessage);
+                        readMessage=" ";
+
 
                     }
                     readMessage="";
-                      // msg.arg1 = bytes from connect thread
+
                 }
             }
         };
@@ -128,9 +146,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         notification.setAutoCancel(true);
         ViewAll();
 
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Alert");
+                alertDialog.setMessage("Are you having an anaphylactic shock ");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                notification_func();
+                                sendEmail();
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+            }
+        });
     }
 
+    private void sendEmail() {
+        //Getting content for email
+        String email = "iiitdmj7@gmail.com";
+        String subject = "Patient is having anaphylactic shock";
+        String message = "Yash Pratap Singh is having a anaphylactic shock";
 
+        //Creating SendMail object
+        SendMail sm = new SendMail(this, email, subject, message);
+
+        //Executing sendmail to send email
+        sm.execute();
+    }
 
     public void ViewAll(){
         viewallBtn.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +271,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this,"Instructions",Toast.LENGTH_SHORT).show();
         }
         if(id==R.id.about){
-            Toast.makeText(this,"About",Toast.LENGTH_SHORT).show();
+            Intent i= new Intent(this, About.class);
+            startActivity(i);
         }
         mdrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mdrawerLayout.closeDrawers();
@@ -228,15 +282,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-
+        BluetoothDevice device;
         //Get MAC address from DeviceListActivity via intent
         Intent intent = getIntent();
 
         //Get the MAC address from the DeviceListActivty via EXTRA
-        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-
+        try {
+            address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Failed to get address", Toast.LENGTH_LONG).show();
+        }
         //create device and set the MAC address
-        BluetoothDevice device = btAdapter.getRemoteDevice(address);
+        try{
+            device = btAdapter.getRemoteDevice(address);
+        }
+        catch (Exception e){
+            device = btAdapter.getRemoteDevice("00:21:13:02:1F:72");
+        }
+
 
         try {
             btSocket = createBluetoothSocket(device);
@@ -248,13 +311,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             btSocket.connect();
         } catch (IOException e) {
-            try
-            {
-                btSocket.close();
-            } catch (IOException e2)
-            {
-                //insert code to deal with this
-            }
+            Toast.makeText(getBaseContext(), "Socket connection failed", Toast.LENGTH_LONG).show();
+
         }
         mConnectedThread = new ConnectedThread(btSocket);
         mConnectedThread.start();
@@ -331,11 +389,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void write(String input) {
             byte[] msgBuffer = input.getBytes();           //converts entered String into bytes
             try {
-                mmOutStream.write(msgBuffer);                //write bytes over BT connection via outstream
+                mmOutStream.write(msgBuffer);
+
+
+                //write bytes over BT connection via outstream
             } catch (IOException e) {
                 //if you cannot write, close the application
-                Toast.makeText(getBaseContext(), "Connection Failure", Toast.LENGTH_LONG).show();
-                finish();
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Connection failed!!!!");
+                alertDialog.setMessage("Do you want to retry");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                recreate();
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                alertDialog.show();
+                //finish();
 
             }
         }

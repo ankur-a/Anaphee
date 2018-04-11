@@ -6,7 +6,15 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:fitsSystemWindows="true">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Heart Beat Stats"
+        android:textSize="35dp"
+        android:textAllCaps="true"
+        android:gravity="center_horizontal"
+        android:textColor="#000000"
+        android:paddingTop="10dp" />
     <RelativeLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
@@ -38,10 +46,13 @@
             android:textSize="40sp"
             android:textStyle="bold" />
 
-        <com.jjoe64.graphview.GraphView android:layout_height="350dp"
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/grpahview"
             android:layout_width="match_parent"
-            android:id="@+id/grpahview">
-        </com.jjoe64.graphview.GraphView>
+            android:layout_height="350dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="70dp"></com.jjoe64.graphview.GraphView>
 
         <TextView
             android:id="@+id/textView2"
