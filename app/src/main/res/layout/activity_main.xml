@@ -57,7 +57,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:paddingBottom="50sp"
-            android:text="72"
+            android:text="00"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="50dp"
@@ -76,18 +76,11 @@
             android:textAlignment="center"
             android:textSize="40dp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/buttonShow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
-            android:text="i" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/buttonShow"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
             android:clickable="true"

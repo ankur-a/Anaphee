@@ -28,7 +28,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class statistics extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
+    final String instru= "Instructions";
+    final String steps= "Step 1.Take off the safety cap\nStep 2.Hold the injector firmly in your hand.\nStep 3.Press it against your thigh firmly and hold it there.\nStep 4.Wait till the LED on top goes off\nStep 5.Remove the injector and massage the site for 10 seconds.";
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
     DatabaseHelper mydb;
@@ -123,6 +124,15 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
         return super.onOptionsItemSelected(item);
     }
 
+    public void showMessage(String Title, String Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(Title);
+        builder.setMessage(Message);
+        builder.show();
+
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Log.e("here","akjakdjaskjd");
@@ -143,7 +153,7 @@ public class statistics extends AppCompatActivity implements NavigationView.OnNa
             startActivity(i);
         }
         if(id == R.id.instructions){
-            Toast.makeText(this,"Instructions",Toast.LENGTH_SHORT).show();
+            showMessage(instru,steps);
         }
         if(id==R.id.about){
             Intent i= new Intent(this, About.class);

@@ -2,18 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="@drawable/hospital"
+    android:background="@color/colorPrimary"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
     android:gravity="bottom">
-
+    <com.beardedhen.androidbootstrap.BootstrapWell
+        android:id="@+id/medications"
+        android:layout_below="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Health tracker"
+        android:text="Anaphee"
+        android:textAlignment="center"
         android:textSize="20dp"
         android:textColor="#000000"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    </com.beardedhen.androidbootstrap.BootstrapWell>
 
 </LinearLayout>

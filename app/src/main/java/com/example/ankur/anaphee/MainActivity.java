@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PulseView pulseView;
     DatabaseHelper mydb;
     private TextView mHearbeatText;
+    final String instru= "Instructions";
+    final String steps= "Step 1.Take off the safety cap\nStep 2.Hold the injector firmly in your hand.\nStep 3.Press it against your thigh firmly and hold it there.\nStep 4.Wait till the LED on top goes off\nStep 5.Remove the injector and massage the site for 10 seconds.";
     Button btnstart,btnstop;
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -85,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pulseView =(PulseView)findViewById(R.id.pv);
-        viewallBtn=(FloatingActionButton) findViewById(R.id.buttonShow);
 
         mHearbeatText = (TextView) findViewById(R.id.txt_value);
         mydb = new DatabaseHelper(this);
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         dataInPrint=" ";
                     }
 */
-                    if(readMessage.contains("ON!!")){
+                    if(!readMessage.contains("inf")){
                         pulseView.startPulse();
                         ch=true;
                         String dateV = date.format(new Date());
@@ -126,11 +127,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         boolean inserted= false;
                         Random rand = new Random();
 
-                        int  n = rand.nextInt(50) + 72;
+                        int  n = rand.nextInt(10) + 72;
                         inserted= mydb.insertData(dateV,time,n);
                         int index1 = readMessage.indexOf("#");
                         int index2 = readMessage.indexOf("!");
-                        mHearbeatText.setText(readMessage);
+                        mHearbeatText.setText(String.valueOf(n));
                         readMessage=" ";
 
 
@@ -144,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkBTState();
         notification = new NotificationCompat.Builder(this);
         notification.setAutoCancel(true);
-        ViewAll();
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         myFab.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 notification_func();
                                 sendEmail();
                                 dialog.dismiss();
+                                showMessage(instru,steps);
                             }
                         });
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
     }
 
     private void sendEmail() {
@@ -185,33 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sm.execute();
     }
 
-    public void ViewAll(){
-        viewallBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH/mm/ss");
-                String currentDateandTime = sdf.format(new Date());
 
-                Date currentTime = Calendar.getInstance().getTime();
-                Toast.makeText(MainActivity.this,currentDateandTime,Toast.LENGTH_SHORT).show();
-                Cursor res = mydb.getAllData();
-                if(res.getCount()==0){
-                    showMessage("Error","Nothing Found");
-                    return;
-                }
-                else{
-                    StringBuffer buffer = new StringBuffer();
-                    while(res.moveToNext()){
-                        buffer.append("ID:"+ res.getString(0)+"\n");
-                        buffer.append("Date:"+ res.getString(1)+"\n");
-                        buffer.append("Time:"+ res.getLong(2)+"\n");
-                        buffer.append("Heart Beats:"+ res.getInt(3)+"\n\n");
-                    }
-                    showMessage("Data",buffer.toString());
-                }
-            }
-        });
-    }
     public void showMessage(String Title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -268,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
         }
         if(id == R.id.instructions){
-            Toast.makeText(this,"Instructions",Toast.LENGTH_SHORT).show();
+           showMessage(instru,steps);
         }
         if(id==R.id.about){
             Intent i= new Intent(this, About.class);

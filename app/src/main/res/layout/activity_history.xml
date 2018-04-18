@@ -8,31 +8,212 @@
     android:background="#ffffff"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
+                android:id="@+id/image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/pic"
+                app:hasBorder="false" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/image"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="Geetender Raj"
+                android:textSize="30dp"
+                android:textColor="#000"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapWell
+                android:id="@+id/anphy"
+                android:layout_below="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.beardedhen.androidbootstrap.AwesomeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Anaphylaxis"
+                    android:textSize="20sp"
+                    android:textColor="#000000"
+                    />
+            </com.beardedhen.androidbootstrap.BootstrapWell>
+
+            <TextView
+                android:id="@+id/symp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/anphy"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Symptoms"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/sympval"
+                android:layout_below="@id/symp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Skin rash, nausea, vomiting, difficulty breathing and shock"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:enabled="false"
+                />
+            <TextView
+                android:id="@+id/sever"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sympval"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Severity"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapProgressBar
+                android:id="@+id/progbar"
+                android:paddingTop="5dp"
+                android:layout_below="@+id/sever"
+                android:layout_width="340dp"
+                android:layout_height="30dp"
+                app:animated="true"
+                app:bootstrapBrand="warning"
+                app:striped="true"
+                app:bootstrapProgress="70"
+                android:layout_marginLeft="10dp"
+                />
+
+            <com.beardedhen.androidbootstrap.BootstrapWell
+                android:layout_marginTop="10dp"
+                android:id="@+id/allergies"
+                android:layout_below="@+id/progbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.beardedhen.androidbootstrap.AwesomeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alergies"
+                    android:textSize="20sp"
+                    android:textColor="#000000"
+                    />
+            </com.beardedhen.androidbootstrap.BootstrapWell>
+
+            <TextView
+                android:id="@+id/allergic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/allergies"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Allergic to"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapDropDown
+                android:id="@+id/allergicval"
+                android:layout_below="@+id/allergic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bootstrapBrand="success"
+                app:bootstrapExpandDirection="down"
+                app:bootstrapText="Allergic to"
+                app:dropdownResource="@array/bootstrap_dropdown_example_data"
+                app:roundedCorners="true"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/detailstxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/allergicval"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Details"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/details"
+                android:layout_below="@id/detailstxt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="     "
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:enabled="false"
+                />
+            <com.beardedhen.androidbootstrap.BootstrapWell
+                android:layout_marginTop="10dp"
+                android:id="@+id/medications"
+                android:layout_below="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.beardedhen.androidbootstrap.AwesomeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medications"
+                    android:textSize="20sp"
+                    android:textColor="#000000"
+                    />
+            </com.beardedhen.androidbootstrap.BootstrapWell>
+
+            <TextView
+                android:id="@+id/present_medic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/medications"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Current Medications"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/medicval"
+                android:layout_below="@id/present_medic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Claritin, Zyrtec and Alavert, Allegra"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:enabled="false"
+                />
+            <TextView
+                android:id="@+id/previous_medic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/medicval"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Previous Medications"
+                android:textSize="18sp"/>
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/prevval"
+                android:layout_below="@id/previous_medic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Claritin, Zyrtec "
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:enabled="false"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
 
 
-        <TextView
-            android:id="@+id/head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medical ID"
-            android:textSize="30dp"
-            android:textAllCaps="true"
-            android:textColor="#000000"
-            android:gravity="center_horizontal"/>
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/pic"
-            android:layout_below="@id/head"
-            android:layout_centerHorizontal="true"/>
 
 
 
-    </RelativeLayout>
+
+
 
 
 

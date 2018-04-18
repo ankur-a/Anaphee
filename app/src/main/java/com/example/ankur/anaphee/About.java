@@ -1,5 +1,6 @@
 package com.example.ankur.anaphee;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -12,7 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class About extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
+    final String instru= "Instructions";
+    final String steps= "Step 1.Take off the safety cap\nStep 2.Hold the injector firmly in your hand.\nStep 3.Press it against your thigh firmly and hold it there.\nStep 4.Wait till the LED on top goes off\nStep 5.Remove the injector and massage the site for 10 seconds.";
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
     TextView content;
@@ -41,6 +43,14 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
         return super.onOptionsItemSelected(item);
     }
 
+    public void showMessage(String Title, String Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(Title);
+        builder.setMessage(Message);
+        builder.show();
+
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Log.e("here","akjakdjaskjd");
@@ -61,7 +71,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
             startActivity(i);
         }
         if(id == R.id.instructions){
-            Toast.makeText(this,"Instructions",Toast.LENGTH_SHORT).show();
+            showMessage(instru,steps);
         }
         if(id==R.id.about){
             Intent i= new Intent(this, About.class);

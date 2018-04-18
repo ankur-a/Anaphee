@@ -5,4 +5,9 @@
     <string name="title_activity_statistics">statistics</string>
     <string name="title_activity_device_list">DeviceListActivity</string>
     <string name="none_paired">None paired</string>
+    <array name="bootstrap_dropdown_example_data">
+        <item>Drug allergy</item>
+        <item>Food allergies</item>
+        <item>Contact dermatitis</item>
+    </array>
 </resources>
