@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationview.setNavigationItemSelectedListener(this);
         date = new SimpleDateFormat("yyyy/MM/dd");
         time = new SimpleDateFormat("HH/mm/ss");
-
+        pulseView.startPulse();
+        
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == handlerState) {                                     //if message is what we want
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 */
                     if(!readMessage.contains("inf")){
-                        pulseView.startPulse();
+
                         ch=true;
                         String dateV = date.format(new Date());
                         long time = new Date().getTime();
